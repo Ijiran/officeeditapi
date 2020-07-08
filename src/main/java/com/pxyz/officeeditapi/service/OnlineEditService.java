@@ -5,7 +5,6 @@ import com.pxyz.officeeditapi.bean.FileInfo;
 import com.pxyz.officeeditapi.bean.FileLock;
 import com.pxyz.officeeditapi.mapper.OnlineEditMapper;
 import com.pxyz.officeeditapi.util.BigFileOutputStream;
-import com.pxyz.officeeditapi.util.FtpUtils;
 import com.pxyz.officeeditapi.util.JacksonUtil;
 import com.pxyz.officeeditapi.util.OnlineFileUtils;
 import org.apache.http.protocol.HTTP;
@@ -159,9 +158,9 @@ public class OnlineEditService {
         try {
             if(filePath.startsWith("/")) filePath = filePath.substring(1);
             //删除FTP源文件
-            FtpUtils.deleteFile(FtpUtils.InternationUploadPath + filePath);
+
             //上传FTP
-            FtpUtils.uploadFile(inputStream, FtpUtils.InternationUploadPath + filePath);
+
             //更新文件信息
             onlineEditMapper.updateFileInfo(fileId);
 

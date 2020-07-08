@@ -2,12 +2,11 @@ package com.pxyz.officeeditapi.util;
 
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.util.Date;
 import java.util.Map;
 
 import com.pxyz.officeeditapi.bean.FileInfo;
 import org.apache.commons.codec.binary.Base64;
-
-import oracle.sql.TIMESTAMP;
 
 /**
  * 在线编辑文件工具类
@@ -20,17 +19,17 @@ public class OnlineFileUtils {
      * @return
      */
     public static FileInfo packOnlineFileInfo(Map<String,Object> map){
-        TIMESTAMP time;
+        Date time;
         if(map.get("UPDATE_TIME") != null){
-            time = (TIMESTAMP)map.get("UPDATE_TIME");
+            time = (Date)map.get("UPDATE_TIME");
         }else{
-            time = (TIMESTAMP)map.get("CREATE_TIME");
+            time = (Date)map.get("CREATE_TIME");
         }
         String filePath = map.get("FTP_FILE_PATH").toString();
         String ownerId = "admin";
         FileInfo onlineFileInfo = new FileInfo();
         try {
-            long version = time.dateValue().getTime(); // 文件版本号
+            long version = time.getTime(); // 文件版本号
             InputStream inputStream = getFileInputStream(filePath);
             onlineFileInfo.setBaseFileName(map.get("FTP_FILE_NAME").toString());
             onlineFileInfo.setOwnerId(ownerId);
@@ -58,13 +57,13 @@ public class OnlineFileUtils {
     public static Long getFileVersion(Object createTime, Object updateTime){
         long version = 0L;
         try {
-            TIMESTAMP time;
+            Date time;
             if(createTime != null){
-                time = (TIMESTAMP)updateTime;
+                time = (Date)updateTime;
             }else{
-                time = (TIMESTAMP)createTime;
+                time = (Date)createTime;
             }
-            version = time.dateValue().getTime(); // 文件版本号
+            version = time.getTime(); // 文件版本号
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,7 +77,8 @@ public class OnlineFileUtils {
      */
     public static InputStream getFileInputStream(String filePath){
         if(filePath.startsWith("/")) filePath = filePath.substring(1);
-        InputStream inputStream = FtpUtils.readFile(FtpUtils.InternationUploadPath + filePath);
+        //读取FTP文件流
+        InputStream inputStream = null;
         return inputStream;
     }
 
